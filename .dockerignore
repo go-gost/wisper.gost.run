@@ -1,0 +1,21 @@
+# Keep the build context lean and keep repo/git files out of the image.
+.git
+.gitignore
+.gitattributes
+.github
+.remember
+.vscode
+.idea
+
+# Not served — GitHub Pages / repo metadata only.
+CNAME
+.nojekyll
+README.md
+CLAUDE.md
+
+# Docker itself shouldn't enter the context.
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+**/*.md

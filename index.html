@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wisper — Silent In, Silent Out.</title>
+  <meta name="description" content="Wisper is a self-hosted GOST tunnel manager. Expose local files, web servers, and TCP/UDP services to the public internet through the GOST network — from a single binary, a desktop app, or your phone." />
+  <meta name="theme-color" content="#1a1a2e" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Wisper — Silent In, Silent Out." />
+  <meta property="og:description" content="A self-hosted GOST tunnel manager. Expose anything local to the public internet." />
+  <meta property="og:url" content="https://wisper.gost.run/" />
+  <meta property="og:image" content="assets/logo.png" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+  <link href="https://fonts.bunny.net/css?family=ibm-plex-mono:400;500;600;700&family=ibm-plex-sans:400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Theme boot — runs before paint to avoid flash. Default: dark. -->
+  <script>
+    (function () {
+      document.documentElement.classList.add('js');
+      try {
+        var t = localStorage.getItem('wisper-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ───────────────────────── NAV ───────────────────────── -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="Wisper home">
+        <img src="assets/logo.png" alt="" class="brand-mark" width="28" height="28" />
+        <span class="brand-name">WISPER</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#directions" data-i18n="nav.directions">Directions</a>
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#download" data-i18n="nav.download">Download</a>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="tool-btn" id="lang-toggle" aria-label="Switch language" title="中文 / EN">
+          <span id="lang-label">中文</span>
+        </button>
+        <button class="tool-btn" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
+          <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+          <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" /></svg>
+        </button>
+        <a class="tool-btn ghost" href="https://github.com/go-gost/wisper" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <span id="top"></span>
+
+  <main>
+    <!-- ───────────────────────── HERO ───────────────────────── -->
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="grid-layer"></div>
+        <span class="packet" style="--top:18%;--dur:7s;--delay:0s"></span>
+        <span class="packet" style="--top:34%;--dur:9s;--delay:2.5s"></span>
+        <span class="packet" style="--top:62%;--dur:6.5s;--delay:1.2s"></span>
+        <span class="packet" style="--top:78%;--dur:8.2s;--delay:4s"></span>
+        <span class="packet alt" style="--top:50%;--dur:11s;--delay:0.6s"></span>
+        <div class="hero-glow"></div>
+      </div>
+
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">GOST Tunnel Manager</p>
+          <h1 class="hero-title">
+            <span data-i18n="hero.title.silent">Silent</span>
+            <span data-i18n="hero.title.in">In</span>
+            <br />
+            <span data-i18n="hero.title.silent2">Silent</span>
+            <span data-i18n="hero.title.out">Out</span>
+          </h1>
+          <p class="hero-tag mono" data-i18n="hero.tag">GOST tunnels, managed.</p>
+          <p class="hero-desc" data-i18n="hero.desc">Expose local files, web servers, and raw TCP/UDP services to the public internet through the GOST network — from a single binary, a desktop app, or your phone.</p>
+
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#download">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" /></svg>
+              <span data-i18n="hero.ctaPrimary">Download</span>
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/go-gost/wisper#readme" target="_blank" rel="noopener">
+              <span data-i18n="hero.ctaSecondary">Quickstart</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0l-6-6m6 6l-6 6" /></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Mock terminal -->
+        <div class="terminal" id="terminal" aria-label="Wisper terminal demo">
+          <div class="term-chrome">
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-dot"></span>
+            <span class="term-title mono" data-i18n="term.title">wisper</span>
+            <span class="term-spacer"></span>
+            <span class="term-pill mono">wisper.gost.run</span>
+          </div>
+          <pre class="term-body mono" id="term-body"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── TRUST STRIP ───────────────────────── -->
+    <section class="strip" aria-label="At a glance">
+      <div class="strip-inner">
+        <span data-i18n="strip.powered">Powered by GOST</span>
+        <i class="sep"></i>
+        <span>MIT</span>
+        <i class="sep"></i>
+        <span data-i18n="strip.self">Self-hosted</span>
+        <i class="sep"></i>
+        <span data-i18n="strip.single">Single binary</span>
+        <i class="sep"></i>
+        <span data-i18n="strip.rest">Persists across restarts</span>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── FEATURES ───────────────────────── -->
+    <section class="section reveal features" id="features">
+      <header class="section-head">
+        <p class="eyebrow" data-i18n="features.eyebrow">Four ways through</p>
+        <h2 class="section-title" data-i18n="features.title">Every protocol, one manager.</h2>
+      </header>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card-top">
+            <span class="card-glyph">📁</span>
+            <span class="card-tag mono">FILE</span>
+          </div>
+          <h3 class="card-name" data-i18n="features.file.name">File</h3>
+          <p class="card-desc" data-i18n="features.file.desc">Serve a local directory over HTTPS with a public URL.</p>
+          <code class="card-url mono">https://a3f9c1.gost.run</code>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-glyph">🌐</span>
+            <span class="card-tag mono">HTTP</span>
+          </div>
+          <h3 class="card-name" data-i18n="features.http.name">HTTP</h3>
+          <p class="card-desc" data-i18n="features.http.desc">Reverse-proxy a local web service to the public net.</p>
+          <code class="card-url mono">https://a3f9c1.gost.run</code>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-glyph">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+            </span>
+            <span class="card-tag mono">TCP</span>
+          </div>
+          <h3 class="card-name" data-i18n="features.tcp.name">TCP</h3>
+          <p class="card-desc" data-i18n="features.tcp.desc">Relay a raw TCP service through a tunnel.</p>
+          <code class="card-url mono">tcp://a3f9c1.gost.run:12345</code>
+        </article>
+
+        <article class="card">
+          <div class="card-top">
+            <span class="card-glyph">📡</span>
+            <span class="card-tag mono">UDP</span>
+          </div>
+          <h3 class="card-name" data-i18n="features.udp.name">UDP</h3>
+          <p class="card-desc" data-i18n="features.udp.desc">Relay a raw UDP service through a tunnel.</p>
+          <code class="card-url mono">udp://a3f9c1.gost.run:12345</code>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── DIRECTIONS (In / Out) ───────────────────────── -->
+    <section class="section reveal directions" id="directions">
+      <header class="section-head">
+        <p class="eyebrow" data-i18n="dir.eyebrow">Two directions</p>
+        <h2 class="section-title" data-i18n="dir.title">Two directions, both silent.</h2>
+      </header>
+
+      <div class="dir-grid">
+        <article class="dir-card out">
+          <span class="dir-arrow" aria-hidden="true">
+            <svg viewBox="0 0 48 24" class="flow-svg"><line class="flow-line" x1="4" y1="12" x2="40" y2="12" /><path class="flow-head" d="M34 6l8 6-8 6" /><circle class="flow-dot" r="3.2" cy="12" cx="4" /></svg>
+          </span>
+          <span class="dir-badge mono" data-i18n="dir.out.badge">OUT</span>
+          <h3 class="dir-name" data-i18n="dir.out.name">Local → Public</h3>
+          <p class="dir-desc" data-i18n="dir.out.desc">Expose a service on your machine to anyone on the internet.</p>
+          <p class="dir-sub mono" data-i18n="dir.out.sub">Tunnels · file · http · tcp · udp</p>
+        </article>
+
+        <article class="dir-card in">
+          <span class="dir-arrow" aria-hidden="true">
+            <svg viewBox="0 0 48 24" class="flow-svg"><line class="flow-line" x1="8" y1="12" x2="44" y2="12" /><path class="flow-head" d="M14 6l-8 6 8 6" /><circle class="flow-dot" r="3.2" cy="12" cx="44" /></svg>
+          </span>
+          <span class="dir-badge mono" data-i18n="dir.in.badge">IN</span>
+          <h3 class="dir-name" data-i18n="dir.in.name">Public → Local</h3>
+          <p class="dir-desc" data-i18n="dir.in.desc">Reach a public GOST endpoint from a local port.</p>
+          <p class="dir-sub mono" data-i18n="dir.in.sub">Entrypoints · tcp · udp</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── HOW IT WORKS ───────────────────────── -->
+    <section class="section reveal how" id="how">
+      <header class="section-head">
+        <p class="eyebrow" data-i18n="how.eyebrow">How it works</p>
+        <h2 class="section-title" data-i18n="how.title">Live in three steps.</h2>
+      </header>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-no mono">01</span>
+          <h3 class="step-name" data-i18n="how.s1.name">Pick a tunnel type</h3>
+          <p class="step-desc" data-i18n="how.s1.desc">File, HTTP, TCP, or UDP.</p>
+        </li>
+        <li class="step">
+          <span class="step-no mono">02</span>
+          <h3 class="step-name" data-i18n="how.s2.name">Get a public URL</h3>
+          <p class="step-desc" data-i18n="how.s2.desc">An instant *.gost.run address.</p>
+        </li>
+        <li class="step">
+          <span class="step-no mono">03</span>
+          <h3 class="step-name" data-i18n="how.s3.name">You're live</h3>
+          <p class="step-desc" data-i18n="how.s3.desc">Traffic flows. Watch it in real time.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ───────────────────────── STATS ───────────────────────── -->
+    <section class="section reveal stats">
+      <header class="section-head">
+        <p class="eyebrow" data-i18n="stats.eyebrow">Observability</p>
+        <h2 class="section-title" data-i18n="stats.title">See every byte flow.</h2>
+      </header>
+
+      <div class="dash" role="img" aria-label="Wisper live statistics">
+        <div class="dash-bar">
+          <span class="mono dash-label" data-i18n="stats.panel">a3f9c1.gost.run</span>
+          <span class="mono dash-state"><i class="live-dot"></i><span data-i18n="stats.live">live</span></span>
+        </div>
+        <div class="dash-grid">
+          <div class="stat">
+            <span class="stat-k mono" data-i18n="stats.out">↑ OUT</span>
+            <span class="stat-v mono" data-rate="out">1.24 MB/s</span>
+          </div>
+          <div class="stat">
+            <span class="stat-k mono" data-i18n="stats.in">↓ IN</span>
+            <span class="stat-v mono" data-rate="in">864 KB/s</span>
+          </div>
+          <div class="stat">
+            <span class="stat-k mono" data-i18n="stats.conns">CONNS</span>
+            <span class="stat-v mono" data-rate="conns">12</span>
+          </div>
+          <div class="stat">
+            <span class="stat-k mono" data-i18n="stats.tunnels">TUNNELS</span>
+            <span class="stat-v mono">4</span>
+          </div>
+        </div>
+        <div class="spark" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── DOWNLOAD ───────────────────────── -->
+    <section class="section reveal download" id="download">
+      <header class="section-head">
+        <p class="eyebrow" data-i18n="download.eyebrow">Get Wisper</p>
+        <h2 class="section-title" data-i18n="download.title">One tool, every platform.</h2>
+      </header>
+
+      <div class="dl-grid">
+        <a class="dl" href="https://github.com/go-gost/wisper/releases/latest" target="_blank" rel="noopener">
+          <span class="dl-glyph">🐧</span>
+          <span class="dl-name">Linux</span>
+          <span class="dl-sub mono">.deb · .AppImage</span>
+        </a>
+        <a class="dl" href="https://github.com/go-gost/wisper/releases/latest" target="_blank" rel="noopener">
+          <span class="dl-glyph">🪟</span>
+          <span class="dl-name">Windows</span>
+          <span class="dl-sub mono">NSIS .exe</span>
+        </a>
+        <a class="dl" href="https://github.com/go-gost/wisper/releases/latest" target="_blank" rel="noopener">
+          <span class="dl-glyph">🤖</span>
+          <span class="dl-name">Android</span>
+          <span class="dl-sub mono">.apk</span>
+        </a>
+        <a class="dl disabled" aria-disabled="true">
+          <span class="dl-glyph">🍎</span>
+          <span class="dl-name">macOS</span>
+          <span class="dl-sub mono" data-i18n="download.comingSoon">coming soon</span>
+        </a>
+        <a class="dl" href="https://hub.docker.com/r/gogost/wisper" target="_blank" rel="noopener">
+          <span class="dl-glyph">🐳</span>
+          <span class="dl-name">Docker</span>
+          <span class="dl-sub mono">gogost/wisper</span>
+        </a>
+        <a class="dl" href="https://github.com/go-gost/wisper" target="_blank" rel="noopener">
+          <span class="dl-glyph">⌘</span>
+          <span class="dl-name" data-i18n="download.source">Source</span>
+          <span class="dl-sub mono">git clone</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ───────────────────────── FOOTER ───────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="" class="brand-mark" width="24" height="24" />
+        <span class="brand-name">WISPER</span>
+        <span class="footer-tag" data-i18n="footer.tag">Silent In · Silent Out</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="https://github.com/go-gost/wisper" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://gost.run" target="_blank" rel="noopener">gost.run</a>
+        <a href="https://github.com/go-gost/gost" target="_blank" rel="noopener">GOST</a>
+        <a href="https://t.me/gogost" target="_blank" rel="noopener">Telegram</a>
+      </nav>
+      <p class="footer-meta mono">
+        <span data-i18n="footer.powered">Powered by GOST</span> · MIT · <span class="dim">© Wisper</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/terminal.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

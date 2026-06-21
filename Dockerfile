@@ -36,9 +36,9 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
+    # Static assets: no nginx caching — CloudFlare handles CDN cache.
     location ~* \.(?:css|js|png|jpe?g|gif|ico|svg|woff2?|ttf)$ {
-        expires 7d;
-        add_header Cache-Control "public, must-revalidate";
+        add_header Cache-Control "no-cache";
     }
 
     location = /index.html {
@@ -52,5 +52,10 @@ COPY index.html /usr/share/nginx/html/
 COPY css/       /usr/share/nginx/html/css/
 COPY js/        /usr/share/nginx/html/js/
 COPY assets/    /usr/share/nginx/html/assets/
+
+# Inject the build-time git SHA as cache-busting version.
+# Defaults to dev so local `docker build` works without --build-arg.
+ARG VERSION=dev
+RUN find /usr/share/nginx/html -name '*.html' -exec sed -i "s/___VERSION___/${VERSION}/g" {} +
 
 EXPOSE 80

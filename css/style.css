@@ -105,7 +105,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   color: var(--accent); margin-bottom: 1rem; display: inline-flex; align-items: center; gap: .6rem;
 }
 .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--accent); opacity: .7; }
-.section-title { font-size: clamp(1.7rem, 4vw, 2.75rem); font-weight: 600; line-height: 1.12; letter-spacing: -.02em; }
+.section-title { font-size: clamp(1.7rem, 4vw, 2.75rem); font-weight: 600; line-height: 1.12; letter-spacing: -.02em; margin-bottom: 1rem; }
+
+[data-page="tutorial"] .section { padding: clamp(2rem, 4vw, 3.5rem) var(--pad); }
 
 /* ── Buttons ────────────────────────────────────────────── */
 .btn {
@@ -416,4 +418,126 @@ main section[id], #top { scroll-margin-top: 84px; }
   .packet { display: none; }
   .reveal { opacity: 1; transform: none; }
   html { scroll-behavior: auto; }
+}
+
+/* ── Tutorial page ────────────────────────────────────── */
+/* Active nav state for secondary pages */
+.nav-links a[aria-current="page"] {
+  color: var(--text);
+  background: var(--surface);
+}
+
+/* Prose / documentation text */
+.prose  { max-width: 42rem; }
+.prose p { color: var(--text-2); line-height: 1.7; margin-bottom: 1rem; }
+
+/* Code block: config file display */
+.code-block {
+  background: color-mix(in srgb, var(--bg) 92%, #000);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin: 1.2rem 0;
+}
+.code-block-header {
+  display: flex;
+  align-items: center;
+  padding: .5rem .9rem;
+  background: color-mix(in srgb, var(--surface) 60%, #000);
+  border-bottom: 1px solid var(--border-sub);
+  font-size: .8rem;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+.code-block pre {
+  padding: 1rem 1.2rem;
+  margin: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+.code-block code { font-family: var(--font-mono); }
+[data-theme="light"] .code-block { background: var(--surface-2); }
+[data-theme="light"] .code-block-header { background: color-mix(in srgb, var(--surface-2) 80%, #000); }
+
+/* Service grid: 4 service cards (2×2) */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.service-card {
+  padding: 1.3rem 1.2rem;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--border-sub);
+  transition: border-color .25s var(--ease);
+}
+.service-card:hover { border-color: var(--accent); }
+.service-card .service-name {
+  font-family: var(--font-mono);
+  font-weight: 600; font-size: 1rem;
+  margin-bottom: .15rem;
+}
+.service-card .service-role {
+  font-size: .7rem;
+  letter-spacing: .12em;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  margin-bottom: .6rem;
+}
+.service-card p { color: var(--text-2); font-size: .9rem; line-height: 1.6; }
+
+/* Flow steps: numbered list with circle markers */
+.flow-steps {
+  list-style: none;
+  counter-reset: fstep;
+  margin: 1.5rem 0;
+}
+.flow-step {
+  counter-increment: fstep;
+  padding: .8rem 0 .8rem 2.8rem;
+  position: relative;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.flow-step::before {
+  content: counter(fstep);
+  position: absolute; left: 0; top: .8rem;
+  width: 1.8rem; height: 1.8rem;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bg) 92%, #000);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+}
+
+/* Note / callout */
+.note {
+  padding: 1rem 1.2rem;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--border-sub);
+  border-left: 3px solid var(--accent);
+  margin: 1.2rem 0;
+  font-size: .92rem;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* Responsive: service grid collapse */
+@media (max-width: 980px) {
+  .service-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .code-block pre { font-size: .78rem; }
 }

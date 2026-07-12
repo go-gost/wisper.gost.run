@@ -262,6 +262,16 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .term-live.show { opacity: 1; transform: none; }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 1.6s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: .4; } }
+.term-body.demo-video { padding: 0; min-height: 0; white-space: normal; word-break: normal; }
+.demo-video-link {
+  display: block; position: relative; overflow: hidden;
+}
+.demo-video-link .demo-play {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.3); font-size: 3rem; color: #fff; opacity: 0; transition: opacity .3s;
+}
+.demo-video-link:hover .demo-play,
+.demo-video-link:focus-visible .demo-play { opacity: 1; }
 
 /* ── Trust strip ────────────────────────────────────────── */
 .strip { border-top: 1px solid var(--border-sub); border-bottom: 1px solid var(--border-sub); background: var(--bg-deep); position: relative; z-index: 2; }

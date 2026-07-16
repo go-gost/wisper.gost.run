@@ -74,6 +74,8 @@
       'download.title': 'One tool, every platform.',
       'download.binary': 'binary',
       'download.comingSoon': 'coming soon',
+      'download.chrome': 'Chrome',
+      'download.chromeSub': 'Extension',
       'download.source': 'Source',
 
       'note.tls': 'For production deployments, configure Traefik with a valid TLS certificate via Let\'s Encrypt (using the acme provider) and replace gost.local with your actual domain.',
@@ -185,6 +187,8 @@
       'download.title': '一个工具，全平台。',
       'download.binary': '二进制',
       'download.comingSoon': '敬请期待',
+      'download.chrome': 'Chrome',
+      'download.chromeSub': '扩展',
       'download.source': '源码',
 
       'note.tls': '生产环境中，请为 Traefik 配置有效的 TLS 证书（使用 Let\'s Encrypt 的 acme 提供商），并将 gost.local 替换为你的实际域名。',

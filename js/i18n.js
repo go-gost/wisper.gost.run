@@ -16,7 +16,7 @@
       'hero.title.silent2': 'Silent',
       'hero.title.out': 'Out',
       'hero.tag': 'GOST tunnels, managed.',
-      'hero.desc': 'Expose local files, web servers, and raw TCP/UDP services to the public internet through the GOST network — from a single binary, a desktop app, or your phone.',
+      'hero.desc': 'Expose local files, web servers, and raw TCP/UDP services to the public internet through the GOST network — from a single binary, a desktop app, a Chrome extension, or your phone.',
       'hero.ctaPrimary': 'Download',
       'hero.ctaSecondary': 'Quickstart',
 
@@ -112,7 +112,7 @@
       'footer.powered': 'Powered by GOST',
 
       'title': 'Wisper — Silent In, Silent Out.',
-      'metaDesc': 'Wisper is a self-hosted GOST tunnel manager. Expose local files, web servers, and TCP/UDP services to the public internet through the GOST network.',
+      'metaDesc': 'Wisper is a self-hosted GOST tunnel manager. Expose local files, web servers, and TCP/UDP services to the public internet through the GOST network — from a single binary, a desktop app, a Chrome extension, or your phone.',
       'switchLabel': '中文'
     },
 
@@ -129,7 +129,7 @@
       'hero.title.silent2': '静',
       'hero.title.out': '出',
       'hero.tag': 'GOST 隧道，开箱即管。',
-      'hero.desc': '经 GOST 网络将本地文件、Web 服务与原始 TCP/UDP 服务暴露到公网——单二进制、桌面应用或手机皆可。',
+      'hero.desc': '经 GOST 网络将本地文件、Web 服务与原始 TCP/UDP 服务暴露到公网——单二进制、桌面应用、Chrome 扩展或手机皆可。',
       'hero.ctaPrimary': '下载',
       'hero.ctaSecondary': '快速上手',
 
@@ -225,7 +225,7 @@
       'footer.powered': '基于 GOST',
 
       'title': 'Wisper — 静入，静出。',
-      'metaDesc': 'Wisper 是自托管的 GOST 隧道管理器。经 GOST 网络将本地文件、Web 服务与 TCP/UDP 服务安全暴露到公网。',
+      'metaDesc': 'Wisper 是自托管的 GOST 隧道管理器。经 GOST 网络将本地文件、Web 服务与 TCP/UDP 服务安全暴露到公网——单二进制、桌面应用、Chrome 扩展或手机皆可。',
       'switchLabel': 'EN'
     }
   };

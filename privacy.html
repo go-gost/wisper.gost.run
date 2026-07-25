@@ -10,7 +10,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Privacy Policy — Wisper" />
-  <meta property="og:description" content="What data Wisper handles, how tunnel traffic is relayed, and our data retention practices." />
+  <meta property="og:description" content="What data Wisper handles, how traffic inspector recording works, and our data retention practices." />
   <meta property="og:url" content="https://wisper.gost.run/privacy" />
   <meta property="og:image" content="assets/logo.png" />
   <meta name="twitter:card" content="summary" />
@@ -84,17 +84,31 @@
       <div class="privacy-section">
         <h2>Overview</h2>
         <p>This privacy policy applies to the <strong>Wisper Tunnel</strong> Chrome extension, the <strong>Wisper</strong> desktop application, and the <strong>Wisper</strong> Go server binary. All three products share the same data-handling principles described below.</p>
-        <p>Wisper is designed around a simple premise: <strong>your data stays on your devices unless you explicitly route it through a tunnel you control.</strong></p>
+        <p>Wisper is designed to give you control over your tunnels and your data. Each tunnel has a <strong>recording mode</strong> setting that lets you decide what level of traffic data, if any, is captured for the traffic inspector. Your personal configuration and credentials stay on your device.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h2>Recording mode — your control</h2>
+        <p>Every Wisper tunnel has a <strong>Recording</strong> option with three levels:</p>
+        <ul>
+          <li><strong>Off</strong> (default) — No traffic data is captured. Only aggregate byte and connection counts are collected. This is the privacy-safe default for all new tunnels.</li>
+          <li><strong>Headers only</strong> — Request/response metadata is recorded: HTTP method, URL, status code, and headers. <strong>Body content is excluded.</strong> This data is transmitted to the Wisper server for inspector access.</li>
+          <li><strong>Full</strong> — Request/response headers <em>and</em> body are recorded for debugging purposes. This captures the complete HTTP or WebSocket message content, transmitted to and stored on the Wisper server.</li>
+        </ul>
+        <p>Recording mode is configured per-tunnel and can be changed at any time. When set to <strong>Off</strong>, no request or response content leaves your device through the inspector pipeline.</p>
+        <p><strong>TCP and UDP tunnels</strong> are not subject to traffic inspection — only aggregate byte and connection counts are recorded, regardless of the recording mode setting.</p>
       </div>
 
       <div class="privacy-section">
         <h2>What data we collect</h2>
-        <p><strong>Nothing.</strong> Wisper does not collect, transmit, or sell any personal information, usage analytics, or telemetry. The extension and applications function entirely without a backend service operated by the developer.</p>
+        <p><strong>Nothing personal.</strong> Wisper does not collect, transmit, or sell any personal information, usage analytics, or telemetry.</p>
+        <p>When you enable recording on an HTTP or WebSocket tunnel (Headers only or Full mode), Wisper captures <strong>request and response data</strong> according to the recording mode you selected. This data is transmitted to and stored on the <strong>Wisper server</strong> (<code>wisper.gost.run</code>), retained for <strong>7 days</strong>, and is accessible through the inspector UI in the desktop app and at <a href="https://inspector.gost.run" target="_blank" rel="noopener">inspector.gost.run</a>.</p>
+        <p>When recording is set to <strong>Off</strong> (the default), no HTTP request/response data is captured or transmitted.</p>
       </div>
 
       <div class="privacy-section">
         <h2>Data stored on your device</h2>
-        <p>Wisper stores the following data locally on your device. It never leaves your device except as needed to route tunnel traffic (see "Tunnel traffic" below).</p>
+        <p>Wisper stores the following data locally on your device. This data does not leave your device except as needed to route tunnel traffic. See the "Tunnel traffic" section below for information about inspector data transmitted to the Wisper server.</p>
         <p><strong>Chrome extension (chrome.storage.local):</strong></p>
         <ul>
           <li><strong>Tunnel configuration</strong> — local endpoint address, optional basic-auth credentials (username/password), optional custom hostname, and the tunnel name and ID.</li>
@@ -103,7 +117,6 @@
         <p><strong>Desktop app (Go binary, config file at <code>~/.config/wisper/config.yml</code>):</strong></p>
         <ul>
           <li><strong>Tunnel and entrypoint configuration</strong> — the same tunnel definitions, serialized as YAML on disk.</li>
-          <li><strong>Statistics</strong> — cumulative byte counts and connection counts (stored locally for display; do not leave your device).</li>
           <li><strong>Logs</strong> — operation logs written to <code>~/.config/wisper/logs/</code> (JSON, 10 MB rotation, 7-day retention). These are only used for debugging and are never transmitted.</li>
         </ul>
         <p><strong>What Wisper stores that relates to you personally:</strong></p>
@@ -118,9 +131,9 @@
         <p>When a tunnel is active, Wisper relays bytes between a public <code>*.gost.run</code> endpoint and your local service over a secure WebSocket (WSS) connection through the GOST relay network.</p>
         <ul>
           <li><strong>What is relayed:</strong> The raw bytes of the HTTP, TCP, or UDP session you are tunneling.</li>
-          <li><strong>What is not done:</strong> Wisper and the GOST relay network do not log, inspect, cache, or store the contents of relayed traffic. The relay operates as a transparent transport layer.</li>
+          <li><strong>Inspector recording:</strong> When recording is enabled on an HTTP or WebSocket tunnel (Headers only or Full mode), Wisper captures request and response data (headers, URL, method, status code, and — in Full mode — body content) and sends it to the <strong>Wisper server</strong> (<code>wisper.gost.run</code>) where it is stored for <strong>7 days</strong> to power the built-in traffic inspector, accessible via the desktop app or at <a href="https://inspector.gost.run" target="_blank" rel="noopener">inspector.gost.run</a>. The recording mode is configurable per-tunnel via the Recording option. TCP and UDP tunnels are not inspected — only aggregate byte/connection counts are recorded.</li>
           <li><strong>Encryption:</strong> All relay traffic is encrypted in transit via WSS (WSS over TLS).</li>
-          <li><strong>No persistent storage:</strong> Relay nodes do not retain packet payloads after forwarding.</li>
+          <li><strong>Server-side storage:</strong> The Wisper server retains inspector data (HTTP/WS request/response records) for up to 7 days.</li>
         </ul>
       </div>
 
@@ -128,7 +141,7 @@
         <h2>Third-party services</h2>
         <p>Wisper uses the following third-party infrastructure solely as a transport layer:</p>
         <ul>
-          <li><span class="tag">gost.run</span> GOST relay nodes that forward tunnel traffic. These nodes do not log or inspect payload content.</li>
+          <li><span class="tag">gost.run</span> GOST relay nodes that forward tunnel traffic. The Wisper server (<code>wisper.gost.run</code>) also stores HTTP/WebSocket inspector data for up to 7 days (see "Tunnel traffic" above).</li>
         </ul>
         <p>No third-party analytics, ad networks, or tracking services are used by Wisper.</p>
       </div>
@@ -138,7 +151,9 @@
         <ul>
           <li><strong>Chrome extension:</strong> All data is removed when you delete the tunnel from the extension, or when you uninstall the extension from Chrome.</li>
           <li><strong>Desktop app:</strong> Delete <code>~/.config/wisper/</code> to remove all locally stored configuration and logs.</li>
-          <li><strong>Relay network:</strong> The GOST relay nodes do not retain any data related to your tunnels beyond the duration of an active WebSocket connection. There is nothing for a user to request deletion of on the server side.</li>
+          <li><strong>Traffic inspector data:</strong> When recording is enabled (Headers only or Full mode), HTTP/WebSocket request and response data is stored on the Wisper server (<code>wisper.gost.run</code>) and retained for <strong>7 days</strong>, after which it is automatically deleted. When recording is Off (the default), no request/response data is stored. The inspector is accessible via the desktop app or <a href="https://inspector.gost.run" target="_blank" rel="noopener">inspector.gost.run</a>. TCP/UDP tunnels store only aggregate byte/connection counts.</li>
+          <li><strong>Logs:</strong> Operation logs follow a 10 MB rotation with 7-day retention, stored at <code>~/.config/wisper/logs/</code>.</li>
+          <li><strong>Server-side data:</strong> Inspector data stored on the Wisper server is automatically removed after 7 days. To request earlier deletion, please contact us via <a href="https://github.com/go-gost/wisper" target="_blank" rel="noopener">GitHub</a> or <a href="https://t.me/gogost" target="_blank" rel="noopener">Telegram</a>.</li>
         </ul>
       </div>
 

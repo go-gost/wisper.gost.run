@@ -48,9 +48,7 @@ server {
 EOF
 
 # Ship only the site content — CNAME/.nojekyll/README are GitHub Pages-only.
-COPY index.html    /usr/share/nginx/html/
-COPY tutorial.html /usr/share/nginx/html/
-COPY privacy.html  /usr/share/nginx/html/
+COPY *.html /usr/share/nginx/html/
 COPY css/          /usr/share/nginx/html/css/
 COPY js/        /usr/share/nginx/html/js/
 COPY assets/    /usr/share/nginx/html/assets/

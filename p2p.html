@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-page="p2p">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="p2p.title">Peer-to-Peer Tunnels</title>
+  <meta name="description" data-i18n="p2p.desc" content="Wisper's p2p mode connects two hosts without a public ingress: peers address each other by base64 public key, traverse NAT with STUN and UDP hole punching, and fall back to a self-hosted DERP relay." />
+  <meta name="theme-color" content="#1a1a2e" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" data-i18n="p2p.title" content="Peer-to-Peer Tunnels" />
+  <meta property="og:description" data-i18n="p2p.desc" content="Wisper's p2p mode connects two hosts without a public ingress." />
+  <meta property="og:url" content="https://wisper.gost.run/p2p" />
+  <meta property="og:image" content="assets/logo.png" />
+  <meta name="twitter:card" content="summary" />
+
+  <link rel="icon" href="assets/favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+  <link href="https://fonts.bunny.net/css?family=ibm-plex-mono:400;500;600;700&family=ibm-plex-sans:400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=___VERSION___" />
+
+  <!-- Theme boot — runs before paint to avoid flash. Default: dark. -->
+  <script>
+    (function () {
+      document.documentElement.classList.add('js');
+      try {
+        var t = localStorage.getItem('wisper-theme');
+        if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ───────────────────────── NAV ───────────────────────── -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/" aria-label="Wisper home">
+        <img src="assets/logo.png" alt="" class="brand-mark" width="28" height="28" />
+        <span class="brand-name">WISPER</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/#features" data-i18n="nav.features">Features</a>
+        <a href="/#directions" data-i18n="nav.directions">Directions</a>
+        <a href="/#how" data-i18n="nav.how">How it works</a>
+        <a href="/#download" data-i18n="nav.download">Download</a>
+        <a href="/p2p" data-i18n="nav.p2p" aria-current="page">P2P</a>
+        <a href="/tutorial" data-i18n="nav.tutorial">Self-Hosted</a>
+      </nav>
+
+      <div class="nav-tools">
+        <button class="tool-btn" id="lang-toggle" aria-label="Switch language" title="中文 / EN">
+          <span id="lang-label">中文</span>
+        </button>
+        <button class="tool-btn" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
+          <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+          <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" /></svg>
+        </button>
+        <a class="tool-btn ghost" href="https://github.com/go-gost/wisper" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z" /></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ───────────────────────── PAGE HEADER ───────────────────────── -->
+    <section class="section">
+      <header class="section-head">
+        <p class="eyebrow" data-i18n="nav.p2p">P2P</p>
+        <h1 class="section-title" data-i18n="p2p.title">Peer-to-Peer Tunnels</h1>
+        <div class="prose" style="margin-top: 1.2rem">
+          <p data-i18n="p2p.desc">Wisper's p2p mode connects two hosts without a public ingress: peers address each other by base64 public key, traverse NAT with STUN and UDP hole punching, and fall back to a self-hosted DERP relay.</p>
+        </div>
+      </header>
+    </section>
+
+    <!-- ───────────────────────── WHAT IT PROVIDES ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.what.title">What the p2p layer provides</h2>
+      <div class="prose">
+        <p data-i18n="p2p.what.desc">The p2p layer answers one question: how does host A reach host B through NAT? It takes a peer's public key and returns a TCP or UDP tunnel. Reachability is its scope; access control and confidentiality belong to the layers above it. The relay and the hole-punched path carry plaintext, so a tunnel that needs confidentiality should run tls, mtls, or wss inside it.</p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── TWO ROLES ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.roles.title">Two roles</h2>
+      <div class="service-grid">
+        <article class="service-card">
+          <div class="service-name" data-i18n="p2p.roles.rev.name">Reverse — tunnel type p2p</div>
+          <div class="service-role" data-i18n="p2p.roles.rev.role">Peer → Local</div>
+          <p data-i18n="p2p.roles.rev.desc">Expose a local service to peers only. One process-level host holds the identity; an inbound stream is routed by peer public key to the tunnel's backend, which is a standard GOST service, so it reports the same live stats and byte counters as any other tunnel.</p>
+        </article>
+        <article class="service-card">
+          <div class="service-name" data-i18n="p2p.roles.out.name">Outbound — entrypoint type p2p</div>
+          <div class="service-role" data-i18n="p2p.roles.out.role">Local → Peer</div>
+          <p data-i18n="p2p.roles.out.desc">Reach a peer's target from a local port. A local listener dials through the shared host to the peer's target. protocol selects tcp (a byte stream) or udp (a datagram stream); keepalive holds the session open between packets.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── HOW A SESSION IS BUILT ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.how.title">How a session is built</h2>
+      <ol class="flow-steps">
+        <li class="flow-step" data-i18n="p2p.how.step1">Both hosts open a WebSocket to the DERP relay and register their public key with it.</li>
+        <li class="flow-step" data-i18n="p2p.how.step2">Each host generates a curve25519 keypair on first run; peers address each other by the base64 public key. There is no name lookup.</li>
+        <li class="flow-step" data-i18n="p2p.how.step3">The relay forwards packets between the two keys. It can read and drop the bytes it carries, but it holds no key to decrypt them.</li>
+        <li class="flow-step" data-i18n="p2p.how.step4">Both peers then probe their own NAT — IPv4 via STUN, IPv6 by binding the local egress address — trade the results over the relay, and punch a UDP hole. New tunnels use the direct path (KCP with smux) once it is up.</li>
+        <li class="flow-step" data-i18n="p2p.how.step5">A punch that fails, as with symmetric NAT, leaves traffic on the relay. The relay is always up as a fallback, and only a new punch needs it reachable.</li>
+      </ol>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 720 270" role="img" aria-label="Host A and Host B both reach a DERP relay over WebSocket; once a hole is punched, a direct KCP path carries tunnels between them.">
+          <defs>
+            <marker id="p2p-ah-relay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" class="dgm-head-accent" />
+            </marker>
+          </defs>
+
+          <rect class="dgm-box-accent" x="240" y="14" width="240" height="62" rx="10" />
+          <text class="dgm-title" x="360" y="40" text-anchor="middle">DERP relay</text>
+          <text class="dgm-sub" x="360" y="60" text-anchor="middle">wss · STUN :3478</text>
+
+          <line class="dgm-line" x1="300" y1="76" x2="196" y2="188" />
+          <line class="dgm-line" x1="420" y1="76" x2="524" y2="188" />
+          <text class="dgm-tag" x="212" y="142" text-anchor="middle">relay</text>
+          <text class="dgm-tag" x="508" y="142" text-anchor="middle">relay</text>
+
+          <rect class="dgm-box" x="110" y="190" width="160" height="64" rx="10" />
+          <text class="dgm-title" x="190" y="216" text-anchor="middle">Host A</text>
+          <text class="dgm-sub" x="190" y="236" text-anchor="middle">wisper</text>
+
+          <rect class="dgm-box" x="450" y="190" width="160" height="64" rx="10" />
+          <text class="dgm-title" x="530" y="216" text-anchor="middle">Host B</text>
+          <text class="dgm-sub" x="530" y="236" text-anchor="middle">peer</text>
+
+          <line class="dgm-direct" x1="273" y1="222" x2="447" y2="222" marker-start="url(#p2p-ah-relay)" marker-end="url(#p2p-ah-relay)" />
+          <text class="dgm-tag" x="360" y="210" text-anchor="middle">direct · KCP + smux</text>
+        </svg>
+        <figcaption class="diagram-cap" data-i18n="p2p.fig.session.cap">Both hosts meet at the relay. Once a hole is punched, tunnels move to the direct path; the relay stays up as the fallback.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ───────────────────────── IDENTITY & ADDRESSING ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.identity.title">Identity and addressing</h2>
+      <div class="prose">
+        <p data-i18n="p2p.identity.desc">The process holds one identity, stored in the config directory at p2p/host.key with owner-only permissions, shared by every p2p tunnel and entrypoint. Settings → P2P Identity shows its base64 public key. The key is materialised on demand, so a host can read its own key before anything is running, and two sides can configure each other in either order. The host is reference-counted: it stops when the last user closes, and the key file stays on disk.</p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── ADMISSION: WHITELIST ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.whitelist.title">Admission: the peer whitelist</h2>
+      <div class="prose">
+        <p data-i18n="p2p.whitelist.desc">A p2p tunnel lists the peer public keys allowed to reach it, and each listed key registers a route on the process-level host. An inbound stream from any other peer is closed; there is no catch-all and no default tunnel. An empty whitelist is valid — the tunnel runs and appears in the list, but accepts nothing, which fits configuring the identity and backend first. A key may appear in only one p2p tunnel. It can be disabled without removing it: new streams close, established ones end on their own.</p>
+      </div>
+      <figure class="diagram">
+        <img src="assets/p2p-peers.png" alt="Wisper Allowed peers page: one row per peer public key, masked, with a transport badge, live stats, a disable button, and an Add peer button." loading="lazy" />
+        <figcaption class="diagram-cap" data-i18n="p2p.whitelist.cap">Allowed peers: one row per peer public key, masked, with a transport badge and live stats; a peer can be disabled in place.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ───────────────────────── DIRECT PATH ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.direct.title">The direct path</h2>
+      <div class="prose">
+        <p data-i18n="p2p.direct.desc">Direct is on by default. Once the relay session is up, each peer collects candidates — IPv4 through STUN, IPv6 by binding its local egress address — and exchanges them over the relay. Both peers then dial at once with the same deterministic key, a mutual simultaneous open. A session is used only after both sides complete the echo handshake, so a half-open path cannot become a direct session. A failed punch backs off and retries while traffic stays on the relay. The STUN address is derived from the relay host on :3478 and probed once before use; the public relay answers no STUN, and IPv6 needs none. Setting direct to false forces relay-only.</p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── DATAGRAM LINKS ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.dgram.title">Datagram links</h2>
+      <div class="prose">
+        <p data-i18n="p2p.dgram.desc">A udp tunnel carries datagrams instead of a byte stream. Each dial owns one datagram link, which pairs the dial's stream with an edge to the peer; the datagram that triggered the dial is buffered until that edge opens, so the first packet is not lost. This is the path a tun link takes: GOST owns and configures the tun device, and p2p only moves the packets. There is no inner dialer here, so the link is unencrypted — run it over a trusted path or add encryption above it.</p>
+      </div>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 720 140" role="img" aria-label="A local dial pairs its stream, the local edge, with a peer edge through one datagram link; the first datagram is buffered until the peer edge opens.">
+          <defs>
+            <marker id="p2p-ah-dgram" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
+              <path d="M0 0 L10 5 L0 10 z" class="dgm-head" />
+            </marker>
+          </defs>
+
+          <rect class="dgm-box" x="20" y="48" width="150" height="64" rx="10" />
+          <text class="dgm-title" x="95" y="74" text-anchor="middle">local dial</text>
+          <text class="dgm-sub" x="95" y="94" text-anchor="middle">wisper</text>
+
+          <rect class="dgm-box-accent" x="285" y="40" width="150" height="80" rx="10" />
+          <text class="dgm-title" x="360" y="72" text-anchor="middle">datagram link</text>
+          <text class="dgm-sub" x="360" y="92" text-anchor="middle">one per dial</text>
+
+          <rect class="dgm-box" x="550" y="48" width="150" height="64" rx="10" />
+          <text class="dgm-title" x="625" y="74" text-anchor="middle">peer</text>
+          <text class="dgm-sub" x="625" y="94" text-anchor="middle">host</text>
+
+          <line class="dgm-line" x1="170" y1="80" x2="285" y2="80" marker-end="url(#p2p-ah-dgram)" />
+          <text class="dgm-tag" x="227" y="68" text-anchor="middle">local edge</text>
+          <line class="dgm-line" x1="435" y1="80" x2="550" y2="80" marker-end="url(#p2p-ah-dgram)" />
+          <text class="dgm-tag" x="492" y="68" text-anchor="middle">peer edge</text>
+        </svg>
+        <figcaption class="diagram-cap" data-i18n="p2p.fig.dgram.cap">Each dial owns one datagram link. The first datagram is buffered (32 KiB) until the peer edge opens, so the packet that triggered the dial is not lost.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ───────────────────────── TRANSPORT STATS ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.stats.title">Transport stats</h2>
+      <div class="prose">
+        <p data-i18n="p2p.stats.desc">Status reports whether punching works for each peer. GET /api/p2p returns direct_peers and derp_peers — where each peer's traffic goes now — plus punch_attempts and punch_success, cumulative since start. A punch_attempts that climbs while punch_success stays flat means punching is attempted and failing, the case IPv6 or a port mapping addresses. Per peer, the transport reads as direct, punching, failed, derp, disabled, no-candidates, or stun-unreachable, shown as a badge on the peer list and the entrypoint detail page.</p>
+      </div>
+    </section>
+
+    <!-- ───────────────────────── SELF-HOSTING THE RELAY ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.relay.title">Self-hosting the relay</h2>
+      <div class="prose">
+        <p data-i18n="p2p.relay.desc">Wisper connects to wss://derp.gost.run/derp by default; that relay serves no STUN. Self-host with the official derper — run the binary directly, or the official gogost/derper image (multi-arch, tagged per derper version). It serves STUN on :3478 in the same process. Bind it to an explicit IP with -a so STUN listens on the address family peers query.</p>
+      </div>
+
+      <h3 style="font-size:1.15rem;font-weight:600;margin:1.8rem 0 .75rem" data-i18n="p2p.relay.binary.title">Binary</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span>derper</span></div>
+        <pre><code>derper -c /etc/derper/derper.key \
+  -hostname derp.example.com \
+  -certmode manual -certdir /etc/derper/certs \
+  -a 203.0.113.10:443 \
+  -stun -stun-port 3478 \
+  -verify-clients=false</code></pre>
+      </div>
+
+      <h3 style="font-size:1.15rem;font-weight:600;margin:1.8rem 0 .75rem" data-i18n="p2p.relay.docker.title">Docker — gogost/derper</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span>docker run</span></div>
+        <pre><code>docker run -d --name derper \
+  -p 443:8443 -p 3478:3478/udp \
+  -v "$PWD/certs:/certs:ro" \
+  -v derper-data:/home/derper \
+  gogost/derper:1.102.3 \
+  -a=0.0.0.0:8443 -stun=true -stun-port=3478 \
+  -certmode=manual -certdir=/certs -hostname=derp.example.com \
+  -verify-clients=false -c=/home/derper/derper.key</code></pre>
+      </div>
+      <div class="note" data-i18n="p2p.relay.docker.note">The image is multi-arch (amd64 + arm64) and tagged per derper version. -certdir expects files named &lt;hostname&gt;.crt and &lt;hostname&gt;.key; -c holds the relay's private key, auto-generated on first start and kept by the derper-data volume.</div>
+
+      <div class="note" data-i18n="p2p.relay.note">-verify-clients=false accepts any client — an open relay. Restrict who can reach it (firewall, private network, or Tailscale client verification). The relay can read and drop the traffic it carries but cannot decrypt it; keep confidentiality in the inner protocol, running tls, mtls, or wss over the tunnel.</div>
+    </section>
+
+    <!-- ───────────────────────── CONFIGURE IN THE UI ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.ui.title">Configure in the Wisper UI</h2>
+      <div class="prose">
+        <p data-i18n="p2p.ui.desc">p2p is configured in the Wisper UI, not in a GOST config file. Settings → P2P holds the identity key, the relay URL, certificate verification, the direct-path toggle, and the STUN server. A p2p tunnel or entrypoint is then created like any other type, and its allowed peers are edited on the tunnel's peers page.</p>
+      </div>
+      <figure class="diagram narrow">
+        <img src="assets/p2p-settings.png" alt="Wisper Settings, P2P section: identity key, relay URL, certificate verification, direct path toggle, and STUN server fields." loading="lazy" />
+        <figcaption class="diagram-cap" data-i18n="p2p.ui.cap">Settings → P2P. Set the relay, its certificate, the direct (hole-punched) path, and the STUN server. The identity key is the address peers dial.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ───────────────────────── SECURITY NOTES ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.security.title">Security notes</h2>
+      <div class="prose">
+        <p data-i18n="p2p.security.1">The public key is the address. A DERP relay forwards only between peer keys, so a public client cannot reach a p2p tunnel. The whitelist is the only admission, and a peer that holds a listed key is treated as trusted.</p>
+        <p data-i18n="p2p.security.2">The data plane is plaintext. Neither the relay nor the hole-punched KCP path adds transport crypto; confidentiality sits one layer up in the inner dialer.</p>
+        <p data-i18n="p2p.security.3">Wisper runs the endpoint in-process. There is no loopback gRPC control plane and no auth token to manage; the trust boundary is the process itself.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ───────────────────────── FOOTER ───────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.png" alt="" class="brand-mark" width="24" height="24" />
+        <span class="brand-name">WISPER</span>
+        <span class="footer-tag" data-i18n="footer.tag">Silent In · Silent Out</span>
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="https://github.com/go-gost/wisper" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://gost.run" target="_blank" rel="noopener">gost.run</a>
+        <a href="https://github.com/go-gost/gost" target="_blank" rel="noopener">GOST</a>
+        <a href="https://t.me/gogost" target="_blank" rel="noopener">Telegram</a>
+      </nav>
+      <p class="footer-meta mono">
+        <span data-i18n="footer.powered">Powered by GOST</span> · MIT · <span class="dim">&copy; Wisper</span>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js?v=___VERSION___"></script>
+  <script src="js/theme.js?v=___VERSION___"></script>
+  <script src="js/main.js?v=___VERSION___"></script>
+</body>
+</html>

@@ -411,8 +411,18 @@ main section[id], #top { scroll-margin-top: 84px; }
   .stat:nth-child(2) { border-right: none; }
   .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--border-sub); }
 }
+@media (max-width: 860px) {
+  .nav-inner { flex-wrap: wrap; row-gap: .5rem; }
+  .nav-tools { order: 2; }
+  .nav-links {
+    order: 3; width: 100%;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { white-space: nowrap; }
+}
 @media (max-width: 640px) {
-  .nav-links { display: none; }
   .cards { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; gap: 1.6rem; }
   .steps::before { display: none; }

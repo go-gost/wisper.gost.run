@@ -62,7 +62,8 @@
       const target = document.querySelector(id);
       if (!target) return;
       e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.scrollY - 76;
+      const offset = (nav ? nav.offsetHeight : 60) + 16;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
     });
   });

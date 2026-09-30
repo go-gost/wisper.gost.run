@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title data-i18n="p2p.title">Peer-to-Peer Tunnels</title>
-  <meta name="description" data-i18n="p2p.desc" content="Wisper's p2p mode connects two hosts without a public ingress: peers address each other by base64 public key, traverse NAT with STUN and UDP hole punching, and fall back to a self-hosted DERP relay." />
+  <meta name="description" data-i18n="p2p.desc" content="Wisper's p2p mode connects two hosts without a public ingress: peers address each other by base64 public key, traverse NAT with STUN and UDP hole punching, fall back to a self-hosted DERP relay, and encrypt the data plane end to end." />
   <meta name="theme-color" content="#1a1a2e" />
 
   <!-- Open Graph -->
@@ -84,7 +84,7 @@
     <section class="section">
       <h2 class="section-title" data-i18n="p2p.what.title">What the p2p layer provides</h2>
       <div class="prose">
-        <p data-i18n="p2p.what.desc">The p2p layer answers one question: how does host A reach host B through NAT? It takes a peer's public key and returns a TCP or UDP tunnel. Reachability is its scope; access control and confidentiality belong to the layers above it. The relay and the hole-punched path carry plaintext, so a tunnel that needs confidentiality should run tls, mtls, or wss inside it.</p>
+        <p data-i18n="p2p.what.desc">The p2p layer answers one question: how does host A reach host B through NAT? It takes a peer's public key and returns a TCP or UDP tunnel. Reachability is its scope; access control is the peer whitelist, and the data plane is encrypted end to end — see End-to-end encryption below.</p>
       </div>
     </section>
 
@@ -180,7 +180,7 @@
     <section class="section">
       <h2 class="section-title" data-i18n="p2p.dgram.title">Datagram links</h2>
       <div class="prose">
-        <p data-i18n="p2p.dgram.desc">A udp tunnel carries datagrams instead of a byte stream. Each dial owns one datagram link, which pairs the dial's stream with an edge to the peer; the datagram that triggered the dial is buffered until that edge opens, so the first packet is not lost. This is the path a tun link takes: GOST owns and configures the tun device, and p2p only moves the packets. There is no inner dialer here, so the link is unencrypted — run it over a trusted path or add encryption above it.</p>
+        <p data-i18n="p2p.dgram.desc">A udp tunnel carries datagrams instead of a byte stream. Each dial owns one datagram link, which pairs the dial's stream with an edge to the peer; the datagram that triggered the dial is buffered until that edge opens, so the first packet is not lost. This is the path a tun link takes: GOST owns and configures the tun device, and p2p only moves the packets. There is no inner dialer here; the datagrams are encrypted by the p2p layer itself.</p>
       </div>
 
       <figure class="diagram">
@@ -267,12 +267,23 @@
       </figure>
     </section>
 
+    <!-- ───────────────────────── END-TO-END ENCRYPTION ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.enc.title">End-to-end encryption</h2>
+      <div class="prose">
+        <p data-i18n="p2p.enc.desc">The data plane is encrypted end to end between the two peers — on the relay and on the direct (hole-punched) path, and for tcp and udp tunnels alike. The relay forwards the session's packets but holds no key that reads them.</p>
+        <p data-i18n="p2p.enc.how">Each pair of peers, on each transport, negotiates its own session key. A control frame sealed to the peer's static key carries an ephemeral X25519 public key; the two ephemeral keys derive a shared secret — X25519, then HKDF-SHA256 — into two directional chacha20poly1305 keys, and the multiplexed session runs over records sealed with them. The key material is per session, so a later leak of a peer's long-term key does not open earlier sessions.</p>
+        <p data-i18n="p2p.enc.on">Encryption is on by default; there is nothing to switch on. A peer that predates it never takes part in the handshake, and that session stays plaintext, so an older peer keeps working. The peers list shows the state per peer — encrypted, or plaintext when a peer fell back.</p>
+        <p data-i18n="p2p.enc.limits">What the relay still sees is packet sizes and timing, not content. And because the handshake is negotiated, a relay that drops the handshake frames can force the plaintext fallback; that is indistinguishable from an older peer, and the peer's state shows it.</p>
+      </div>
+    </section>
+
     <!-- ───────────────────────── SECURITY NOTES ───────────────────────── -->
     <section class="section">
       <h2 class="section-title" data-i18n="p2p.security.title">Security notes</h2>
       <div class="prose">
         <p data-i18n="p2p.security.1">The public key is the address. A DERP relay forwards only between peer keys, so a public client cannot reach a p2p tunnel. The whitelist is the only admission, and a peer that holds a listed key is treated as trusted.</p>
-        <p data-i18n="p2p.security.2">The data plane is plaintext. Neither the relay nor the hole-punched KCP path adds transport crypto; confidentiality sits one layer up in the inner dialer.</p>
+        <p data-i18n="p2p.security.2">The data plane is encrypted end to end — see above. The relay can drop the session's packets but cannot read them.</p>
         <p data-i18n="p2p.security.3">Wisper runs the endpoint in-process. There is no loopback gRPC control plane and no auth token to manage; the trust boundary is the process itself.</p>
       </div>
     </section>

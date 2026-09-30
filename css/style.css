@@ -581,6 +581,8 @@ main section[id], #top { scroll-margin-top: 84px; }
 .dgm-title { fill: var(--text); font-family: var(--font-sans); font-size: 15px; font-weight: 600; }
 .dgm-sub { fill: var(--text-3); font-family: var(--font-mono); font-size: 11px; }
 .dgm-tag { fill: var(--accent); font-family: var(--font-mono); font-size: 11px; }
+.dgm-lock-badge { fill: var(--bg); stroke: var(--border); stroke-width: 1.5; }
+.dgm-lock { stroke: var(--accent); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Responsive: service grid collapse */
 @media (max-width: 980px) {

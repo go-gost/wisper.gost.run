@@ -75,16 +75,27 @@
         <p class="eyebrow" data-i18n="nav.p2p">P2P</p>
         <h1 class="section-title" data-i18n="p2p.title">Peer-to-Peer Tunnels</h1>
         <div class="prose" style="margin-top: 1.2rem">
-          <p data-i18n="p2p.desc">Wisper's p2p mode connects two hosts without a public ingress: peers address each other by base64 public key, traverse NAT with STUN and UDP hole punching, and fall back to a self-hosted DERP relay.</p>
+          <p data-i18n="p2p.desc">Wisper's p2p mode connects two hosts without a public ingress: peers address each other by base64 public key, traverse NAT with STUN and UDP hole punching, fall back to a self-hosted DERP relay, and encrypt the data plane end to end.</p>
         </div>
       </header>
+    </section>
+
+    <!-- ───────────────────────── END-TO-END ENCRYPTION ───────────────────────── -->
+    <section class="section">
+      <h2 class="section-title" data-i18n="p2p.enc.title">End-to-end encrypted</h2>
+      <div class="prose">
+        <p data-i18n="p2p.enc.desc">Every p2p session is encrypted end to end between the two peers — on the relay and on the direct (hole-punched) path, and for tcp and udp tunnels alike. The relay forwards the session's packets but holds no key that reads them.</p>
+        <p data-i18n="p2p.enc.how">Each pair of peers, on each transport, negotiates its own session key. A control frame sealed to the peer's static key carries an ephemeral X25519 public key; the two ephemeral keys derive a shared secret — X25519, then HKDF-SHA256 — into two directional chacha20poly1305 keys, and the multiplexed session runs over records sealed with them. The key material is per session, so a later leak of a peer's long-term key does not open earlier sessions.</p>
+        <p data-i18n="p2p.enc.on">Encryption is required: there is no switch to turn it off and no plaintext path. Both peers must run a version with this feature. A peer that does not take part in the handshake is refused — the session does not start, rather than falling back to plaintext. A connected peer is therefore always encrypted, and the peers list has no plaintext state to show.</p>
+        <p data-i18n="p2p.enc.limits">What the relay still sees is packet sizes and timing, not content. A relay that drops the handshake frames cannot force plaintext: it can only prevent the connection from being established.</p>
+      </div>
     </section>
 
     <!-- ───────────────────────── WHAT IT PROVIDES ───────────────────────── -->
     <section class="section">
       <h2 class="section-title" data-i18n="p2p.what.title">What the p2p layer provides</h2>
       <div class="prose">
-        <p data-i18n="p2p.what.desc">The p2p layer answers one question: how does host A reach host B through NAT? It takes a peer's public key and returns a TCP or UDP tunnel. Reachability is its scope; access control is the peer whitelist, and the data plane is encrypted end to end — see End-to-end encryption below.</p>
+        <p data-i18n="p2p.what.desc">The p2p layer answers one question: how does host A reach host B through NAT? It takes a peer's public key and returns a TCP or UDP tunnel. Reachability is its scope; access control is the peer whitelist, and the data plane is encrypted end to end.</p>
       </div>
     </section>
 
@@ -117,7 +128,7 @@
       </ol>
 
       <figure class="diagram">
-        <svg viewBox="0 0 720 270" role="img" aria-label="Host A and Host B both reach a DERP relay over WebSocket; once a hole is punched, a direct KCP path carries tunnels between them.">
+        <svg viewBox="0 0 720 270" role="img" aria-label="Host A and Host B both reach a DERP relay over WebSocket; once a hole is punched, a direct KCP path carries tunnels between them. The session is multiplexed with smux and encrypted end to end on every leg — relay and direct alike.">
           <defs>
             <marker id="p2p-ah-relay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
               <path d="M0 0 L10 5 L0 10 z" class="dgm-head-accent" />
@@ -133,6 +144,18 @@
           <text class="dgm-tag" x="212" y="142" text-anchor="middle">relay</text>
           <text class="dgm-tag" x="508" y="142" text-anchor="middle">relay</text>
 
+          <!-- the relay legs carry ciphertext too: the relay only ever sees sealed records -->
+          <rect class="dgm-lock-badge" x="238" y="122" width="20" height="20" rx="6" />
+          <g class="dgm-lock" transform="translate(248 132) scale(0.55) translate(-12 -12)">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </g>
+          <rect class="dgm-lock-badge" x="462" y="122" width="20" height="20" rx="6" />
+          <g class="dgm-lock" transform="translate(472 132) scale(0.55) translate(-12 -12)">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </g>
+
           <rect class="dgm-box" x="110" y="190" width="160" height="64" rx="10" />
           <text class="dgm-title" x="190" y="216" text-anchor="middle">Host A</text>
           <text class="dgm-sub" x="190" y="236" text-anchor="middle">wisper</text>
@@ -142,9 +165,17 @@
           <text class="dgm-sub" x="530" y="236" text-anchor="middle">peer</text>
 
           <line class="dgm-direct" x1="273" y1="222" x2="447" y2="222" marker-start="url(#p2p-ah-relay)" marker-end="url(#p2p-ah-relay)" />
-          <text class="dgm-tag" x="360" y="210" text-anchor="middle">direct · KCP + smux</text>
+          <text class="dgm-tag" x="360" y="203" text-anchor="middle">direct · KCP</text>
+
+          <!-- the peer-to-peer rail: smux multiplexes the session, sealed end to end -->
+          <rect class="dgm-lock-badge" x="350" y="212" width="20" height="20" rx="6" />
+          <g class="dgm-lock" transform="translate(360 222) scale(0.55) translate(-12 -12)">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </g>
+          <text class="dgm-sub" x="360" y="245" text-anchor="middle">smux</text>
         </svg>
-        <figcaption class="diagram-cap" data-i18n="p2p.fig.session.cap">Both hosts meet at the relay. Once a hole is punched, tunnels move to the direct path; the relay stays up as the fallback.</figcaption>
+        <figcaption class="diagram-cap" data-i18n="p2p.fig.session.cap">Both hosts meet at the relay. Once a hole is punched, tunnels move to the direct path; the relay stays up as the fallback. Either way, traffic between the peers is encrypted end to end.</figcaption>
       </figure>
     </section>
 
@@ -265,17 +296,6 @@
         <img src="assets/p2p-settings.png" alt="Wisper Settings, P2P section: identity key, relay URL, certificate verification, direct path toggle, and STUN server fields." loading="lazy" />
         <figcaption class="diagram-cap" data-i18n="p2p.ui.cap">Settings → P2P. Set the relay, its certificate, the direct (hole-punched) path, and the STUN server. The identity key is the address peers dial.</figcaption>
       </figure>
-    </section>
-
-    <!-- ───────────────────────── END-TO-END ENCRYPTION ───────────────────────── -->
-    <section class="section">
-      <h2 class="section-title" data-i18n="p2p.enc.title">End-to-end encryption</h2>
-      <div class="prose">
-        <p data-i18n="p2p.enc.desc">The data plane is encrypted end to end between the two peers — on the relay and on the direct (hole-punched) path, and for tcp and udp tunnels alike. The relay forwards the session's packets but holds no key that reads them.</p>
-        <p data-i18n="p2p.enc.how">Each pair of peers, on each transport, negotiates its own session key. A control frame sealed to the peer's static key carries an ephemeral X25519 public key; the two ephemeral keys derive a shared secret — X25519, then HKDF-SHA256 — into two directional chacha20poly1305 keys, and the multiplexed session runs over records sealed with them. The key material is per session, so a later leak of a peer's long-term key does not open earlier sessions.</p>
-        <p data-i18n="p2p.enc.on">Encryption is on by default; there is nothing to switch on. A peer that predates it never takes part in the handshake, and that session stays plaintext, so an older peer keeps working. The peers list shows the state per peer — encrypted, or plaintext when a peer fell back.</p>
-        <p data-i18n="p2p.enc.limits">What the relay still sees is packet sizes and timing, not content. And because the handshake is negotiated, a relay that drops the handshake frames can force the plaintext fallback; that is indistinguishable from an older peer, and the peer's state shows it.</p>
-      </div>
     </section>
 
     <!-- ───────────────────────── SECURITY NOTES ───────────────────────── -->
